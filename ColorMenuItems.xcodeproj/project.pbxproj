@@ -19,7 +19,6 @@
 		F37E2A272415B6900061C8BB /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		F37E2A292415B6900061C8BB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		F37E2A2D2415B6900061C8BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F37E2A2F2415B6900061C8BB /* ColorMenuItems.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColorMenuItems.h; sourceTree = "<group>"; };
 		F37E2A302415B6900061C8BB /* ColorMenuItems.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColorMenuItems.m; sourceTree = "<group>"; };
 		F37E2A332415B6900061C8BB /* ZKSwizzle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKSwizzle.h; sourceTree = "<group>"; };
 		F37E2A342415B6910061C8BB /* ZKSwizzle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKSwizzle.m; sourceTree = "<group>"; };
@@ -72,7 +71,6 @@
 				F37E2A2D2415B6900061C8BB /* Info.plist */,
 				F37E2A322415B6900061C8BB /* ZKSwizzle */,
 				F37E2A4024161E270061C8BB /* JSRollCall */,
-				F37E2A2F2415B6900061C8BB /* ColorMenuItems.h */,
 				F37E2A302415B6900061C8BB /* ColorMenuItems.m */,
 			);
 			path = ColorMenuItems;

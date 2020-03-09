@@ -6,13 +6,11 @@
 //  Copyright © 2020 Wolfgang Baird. All rights reserved.
 //
 
-#import "ColorMenuItems.h"
 #import "JSRollCall.h"
 #import "ZKSwizzle.h"
 #import <Cocoa/Cocoa.h>
 
-@interface ColorMenuItems()
-@end
+// ---------------------------------------------------------------------------------
 
 @implementation NSView (imageView)
 
@@ -32,6 +30,8 @@
 
 @end
 
+// ---------------------------------------------------------------------------------
+
 @implementation NSImage (tintImage)
 
 - (NSImage *)imageTintedWithColor:(NSColor *)tint
@@ -49,22 +49,16 @@
 
 @end
 
-@implementation ColorMenuItems
+// ---------------------------------------------------------------------------------
 
-+ (instancetype)sharedInstance
-{
-    static ColorMenuItems *plugin = nil;
-    @synchronized(self) {
-        if (!plugin) {
-            plugin = [[self alloc] init];
-        }
-    }
-    return plugin;
-}
+@interface ColorMenuItems : NSObject
+@end
+
+@implementation ColorMenuItems
 
 + (void)load
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.75 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[JSRollCall new] allObjectsOfClassName:@"NSStatusItem" includeSubclass:YES performBlock:^(id obj) {
             
             // Hooked a status item
@@ -82,10 +76,10 @@
                     // Do some swizzling of cells
                     static dispatch_once_t onceToken;
                     dispatch_once(&onceToken, ^{
-                        ZKSwizzle(BIGD, NSImageCell);
-                        ZKSwizzle(LILD, NSCell);
-                        ZKSwizzle(LILV, NSTextFieldCell);
-                        ZKSwizzle(LILA, CLKView);
+                        ZKSwizzle(CMI_imgCellFix, NSImageCell);
+                        ZKSwizzle(CMI_cellFix, NSCell);
+                        ZKSwizzle(CMI_txtFLD, NSTextFieldCell);
+                        ZKSwizzle(CMI_clockFix, CLKView);
                     });
                     
                     // Try to tint the statusItem image
@@ -114,28 +108,28 @@
 
 // ---------------------------------------------------------------------------------
 
-@interface LILA : NSView
+@interface CMI_clockFix : NSView
 @end
 
-@implementation LILA
+@implementation CMI_clockFix
 - (id)drawColor { return NSColor.controlAccentColor; }
 @end
 
 // ---------------------------------------------------------------------------------
 
-@interface LILV : NSTextFieldCell
+@interface CMI_txtFLD : NSTextFieldCell
 @end
 
-@implementation LILV
+@implementation CMI_txtFLD
 - (void)setTextColor:(NSColor *)textColor { ZKOrig(void, NSColor.controlAccentColor); }
 @end
 
 // ---------------------------------------------------------------------------------
 
-@interface LILD : NSCell
+@interface CMI_cellFix : NSCell
 @end
 
-@implementation LILD
+@implementation CMI_cellFix
 
 - (void)setImage:(id)arg1 {
     [arg1 setTemplate:NO];
@@ -146,10 +140,10 @@
 
 // ---------------------------------------------------------------------------------
 
-@interface BIGD : NSCell
+@interface CMI_imgCellFix : NSCell
 @end
 
-@implementation BIGD
+@implementation CMI_imgCellFix
 
 - (void)setImage:(id)arg1 {
     [arg1 setTemplate:NO];
@@ -159,4 +153,3 @@
 @end
 
 // ---------------------------------------------------------------------------------
-
