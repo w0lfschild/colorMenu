@@ -3,14 +3,13 @@
 //  ColorMenuItems
 //
 //  Created by Wolfgang Baird on 3/8/20.
-//Copyright © 2020 Wolfgang Baird. All rights reserved.
+//  Copyright © 2020 Wolfgang Baird. All rights reserved.
 //
 
 #import "ColorMenuItems.h"
 #import "JSRollCall.h"
-#import <Cocoa/Cocoa.h>
-#import <CoreImage/CoreImage.h>
 #import "ZKSwizzle.h"
+#import <Cocoa/Cocoa.h>
 
 @interface ColorMenuItems()
 @end
