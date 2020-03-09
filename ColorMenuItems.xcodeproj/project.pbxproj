@@ -70,11 +70,10 @@
 			isa = PBXGroup;
 			children = (
 				F37E2A2D2415B6900061C8BB /* Info.plist */,
-				F37E2A3D2415B7E20061C8BB /* JSRollCall.h */,
-				F37E2A3E2415B7E20061C8BB /* JSRollCall.m */,
+				F37E2A322415B6900061C8BB /* ZKSwizzle */,
+				F37E2A4024161E270061C8BB /* JSRollCall */,
 				F37E2A2F2415B6900061C8BB /* ColorMenuItems.h */,
 				F37E2A302415B6900061C8BB /* ColorMenuItems.m */,
-				F37E2A322415B6900061C8BB /* ZKSwizzle */,
 			);
 			path = ColorMenuItems;
 			sourceTree = "<group>";
@@ -86,6 +85,15 @@
 				F37E2A342415B6910061C8BB /* ZKSwizzle.m */,
 			);
 			path = ZKSwizzle;
+			sourceTree = "<group>";
+		};
+		F37E2A4024161E270061C8BB /* JSRollCall */ = {
+			isa = PBXGroup;
+			children = (
+				F37E2A3D2415B7E20061C8BB /* JSRollCall.h */,
+				F37E2A3E2415B7E20061C8BB /* JSRollCall.m */,
+			);
+			path = JSRollCall;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -282,6 +290,8 @@
 				INFOPLIST_FILE = ColorMenuItems/Info.plist;
 				INSTALL_PATH = "/Library/Application Support/MacEnhance/Plugins";
 				MACH_O_TYPE = mh_dylib;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.macenhance.ColorMenuItems;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = bundle;
@@ -301,6 +311,8 @@
 				INFOPLIST_FILE = ColorMenuItems/Info.plist;
 				INSTALL_PATH = "/Library/Application Support/MacEnhance/Plugins";
 				MACH_O_TYPE = mh_dylib;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.macenhance.ColorMenuItems;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = bundle;

@@ -50,23 +50,6 @@
 
 @end
 
-@interface NSMenuExtraView : NSView
-{
-    NSMenu *_menu;
-    NSImage *_image;
-    NSImage *_alternateImage;
-}
-
-@property(retain, nonatomic) NSImage *alternateImage; // @synthesize alternateImage=_alternateImage;
-@property(retain, nonatomic) NSImage *image; // @synthesize image=_image;
-- (void)mouseDown:(id)arg1;
-- (void)drawRect:(struct CGRect)arg1;
-- (void)setMenu:(id)arg1;
-- (id)initWithFrame:(struct CGRect)arg1 menuExtra:(id)arg2;
-
-@end
-
-
 @implementation ColorMenuItems
 
 + (instancetype)sharedInstance
@@ -82,18 +65,22 @@
 
 + (void)load
 {
-    JSRollCall *rc = [JSRollCall new];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [rc allObjectsOfClassName:@"NSStatusItem" includeSubclass:YES performBlock:^(id obj) {
-//            NSLog(@"ROLLCALL: %@", [obj className]);
-
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[JSRollCall new] allObjectsOfClassName:@"NSStatusItem" includeSubclass:YES performBlock:^(id obj) {
+            
+            // Hooked a status item
             NSStatusItem *myStatusItem = (NSStatusItem*)obj;
+            
+            // Make sure we're on 10.14+
             if (@available(macOS 10.14, *)) {
+                
+                // Try to color the statusItem button
                 NSButton *button = myStatusItem.button;
                 button.contentTintColor = NSColor.controlAccentColor;
 
                 // Legacy menu item :(
                 if (!button) {
+                    // Do some swizzling of cells
                     static dispatch_once_t onceToken;
                     dispatch_once(&onceToken, ^{
                         ZKSwizzle(BIGD, NSImageCell);
@@ -102,40 +89,23 @@
                         ZKSwizzle(LILA, CLKView);
                     });
                     
-                    NSView *v = [myStatusItem performSelector:@selector(view)];
-//                    NSLog(@"ROLLCALL: %@", myStatusItem.view);
-//                    NSLog(@"ROLLCALL: %@", myStatusItem.view.subviews.firstObject.className);
-                    
-                    Boolean needsDisplay = false;
-                    NSString *className = v.subviews.firstObject.className;
-                    
-                    if ([className isEqualToString:@"AppleVolumeExtraTitle"]) needsDisplay = true;
-                    if ([className isEqualToString:@"BatteryViewInMenu"]) needsDisplay = true;
-//                        NSView *v3 = v.subviews.firstObject;
-//                        NSImage *popl = [[v3 valueForKey:@"_lastBatteryImage"] firstObject];
-//                        NSImageCell *ce = [v3 valueForKey:@"_batteryImageCell"];
-//                        [ce setImage:popl];
-//                        NSTextFieldCell *pop1 = [v3 valueForKey:@"_batteryTextCell"];
-//                        pop1.textColor = NSColor.controlAccentColor;
-                    if ([className isEqualToString:@"CLKDigitalView"]) {
-                        needsDisplay = true;
-                        NSView *v3 = v.subviews.firstObject;
-                        NSTextFieldCell *popl = [v3 valueForKey:@"cell"];
-                        popl.textColor = NSColor.controlAccentColor;
-                    }
-                    
-                    if (needsDisplay) {
-                        NSView *v3 = v.subviews.firstObject;
-                        [v3 needsDisplay];
-                        [v3 display];
-                    }
-                    
+                    // Try to tint the statusItem image
+                    NSView *statusItemView = [myStatusItem performSelector:@selector(view)];
+                    NSString *className = statusItemView.subviews.firstObject.className;
                     NSImage *i = [myStatusItem performSelector:@selector(image)];
-                    if (i)
-                        [myStatusItem performSelector:@selector(setImage:) withObject:[[v imageRepresentation] imageTintedWithColor:NSColor.controlAccentColor]];
+                    if (i) {
+                        [myStatusItem performSelector:@selector(setImage:) withObject:[[statusItemView imageRepresentation] imageTintedWithColor:NSColor.controlAccentColor]];
+                    } else {
+                        // These items require we refresh the view to get an update
+                        NSView *statusView = statusItemView.subviews.firstObject;
+                        if ([className isEqualToString:@"CLKDigitalView"]) {
+                            NSTextFieldCell *popl = [statusView valueForKey:@"cell"];
+                            popl.textColor = NSColor.controlAccentColor;
+                        }
+                        [statusView needsDisplay];
+                        [statusView display];
+                    }
                 }
-            } else {
-                // Fallback on earlier versions
             }
         }];
     });
@@ -169,11 +139,8 @@
 @implementation LILD
 
 - (void)setImage:(id)arg1 {
-//    NSLog(@"ROLLCALL: %@", self.target);
-    NSImage *test = arg1;
-    [test setTemplate:NO];
-    NSImage *tinted = [test imageTintedWithColor:NSColor.controlAccentColor];
-    ZKOrig(void, tinted);
+    [arg1 setTemplate:NO];
+    ZKOrig(void, [arg1 imageTintedWithColor:NSColor.controlAccentColor]);
 }
 
 @end
@@ -186,11 +153,11 @@
 @implementation BIGD
 
 - (void)setImage:(id)arg1 {
-//    NSLog(@"ROLLCALL: %@", self.className);
-    NSImage *test = arg1;
-    [test setTemplate:NO];
-    NSImage *tinted = [test imageTintedWithColor:NSColor.controlAccentColor];
-    ZKOrig(void, tinted);
+    [arg1 setTemplate:NO];
+    ZKOrig(void, [arg1 imageTintedWithColor:NSColor.controlAccentColor]);
 }
 
 @end
+
+// ---------------------------------------------------------------------------------
+
